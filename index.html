@@ -45,6 +45,20 @@
 				<b>Total:</b> {{total_gb}} GB 
 			</div>
 		</div>
+
+		<div id="minidlnastatus">
+			<h1>MiniDLNA service status</h1>
+			<div style="display:none" id="minidlnatable">
+				<table border=1 cellpadding=10>
+					<tr><td>Audio files</td><td><b> {{audiofiles}} </b></td></tr>
+					<tr><td>Video files</td><td><b> {{videofiles}} </b></td></tr>
+					<tr><td>Image files</td><td><b> {{imagefiles}} </b></td></tr>
+				</table>
+			</div>
+		</div>
+		<p>
+			<a href="/minidlnareload" class="danger">Restart MiniDLNA</a>
+		</p>
 	
 	</div>
 </html>

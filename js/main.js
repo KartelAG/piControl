@@ -20,6 +20,22 @@ $(document).ready(function() {
 		})
 	});
 
+	$.ajax({
+		type:"GET",
+		url :"/minidlnastatus",
+		success:(function(data,status){
+			console.log("print");
+			el = $("#minidlnatable").html();
+			el = el.replace(/{{audiofiles}}/g,data[0].count);
+			el = el.replace(/{{videofiles}}/g,data[1].count);
+			el = el.replace(/{{imagefiles}}/g,data[2].count);
+
+			$("#minidlnastatus").append(el);
+			
+			// $("#minidlnastatus").append(data);
+		})
+	});
+
 	$(".danger").click(function()
 	{
 		var href = $(this).attr("href");

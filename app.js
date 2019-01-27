@@ -3,6 +3,10 @@ var freedisk = require('freedisk');
 var exec = require('child_process').exec;
 var fs = require("fs");
 
+const request = require('request');
+const cheerio =  require('cheerio');
+const cheerioTableparser = require('cheerio-tableparser');
+
 var piRoute = require(__dirname+"/piRoute.js");
 
 http.createServer(function (req, res) {
@@ -10,6 +14,8 @@ http.createServer(function (req, res) {
 	var shutdown = "/shutdown";
 	var restart = "/restart";
 	var getfreedisk = "/freedisk";
+	var minidlnastatus = "/minidlnastatus";
+	var minidlnareload = "/minidlnareload"
 
 	var staticfile = "png|js|css";
 
@@ -31,6 +37,15 @@ http.createServer(function (req, res) {
 		child = exec("reboot", function (error, stdout, stderr) {
 			res.end("Reboot...");
 		});
+	});
+	
+	piRoute.get(minidlnareload,function(req,res)
+	{
+		res.writeHead(200);
+		child = exec("sudo systemctl restart minidlna", function (error, stdout, stderr) {
+			this.piRoute(get("/"));
+		});
+		res.end("Restarting MiniDLNA...");
 	});
 	
 	piRoute.get(getfreedisk,function(req,res)
@@ -77,6 +92,28 @@ http.createServer(function (req, res) {
 		var fileData = fs.readFileSync(__dirname + "/index.html");
 		res.end(fileData);
 	});
+
+	piRoute.get(minidlnastatus, function(req,res) 
+	{
+		var files = [];
+		var i;
+
+		request('http://192.168.1.37:8200', (err, response, html) => {
+  		if (err) { 
+			res.writeHead(503,"Minidlna service unavailable", {'Content-Type': 'html/text'}); 
+		}
+  		const $ = cheerio.load(html);
+  		cheerioTableparser($);
+		let data = $("table").parsetable(false, false, true);
+		for (i=0; i<3; i++) {
+			var file = {"type" : data[0][i], "count" : data[1][i]};
+			files.push(file);
+		}
+		res.writeHead(200, { 'Content-Type': 'application/json' });
+		res.end(JSON.stringify(files));
+  		});
+	});
+	
 
 
 	//piRoute.notfound(); 

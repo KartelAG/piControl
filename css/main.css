@@ -25,6 +25,8 @@ body {
 h1 {
 	padding-top:10px;
 	color:#2222;
+	margin-top:50px;
+	margin-bottom:0;
 }
 
 .disk {
@@ -53,6 +55,20 @@ h1 {
 	z-index:99999;
 }
 
+table {
+	border: 1px solid #ddd;
+	width: 250px;
+	margin: auto;
+	border-collapse: collapse;
+	
+}
+
+td {
+	padding: 15px;
+	text-align: left;
+	font-family:Arial;
+	border: 1px solid #ddd;
+}
 
 #prgoress {
     position:relative;
